@@ -1,6 +1,6 @@
 # -*- encoding utf8-*-
-from visuals.utils.prep import setup
-from visuals.utils.funcs import swap, shuffle
+from turtleSort.utils.prep import setup
+from turtleSort.utils.funcs import swap, shuffle
 
 def cyclesort(lst):
     nums,last,val,fin = [i.value for i in lst],0,0,1

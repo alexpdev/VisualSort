@@ -1,6 +1,6 @@
 # -*- encoding utf8-*-
-from visuals.utils.prep import setup
-from visuals.utils.funcs import swap, shuffle, switch
+from turtleSort.utils.prep import setup
+from turtleSort.utils.funcs import swap, shuffle, switch
 
 def quicksort(lst):
     _quicksort(lst,0,len(lst)-1)

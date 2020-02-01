@@ -1,5 +1,5 @@
 # -*- encoding utf8-*-
-# visual_sorting.utils.funcs
+# turtleSort.utils.funcs
 import random
 
 def swap(loca,locb):

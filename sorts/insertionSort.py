@@ -1,8 +1,8 @@
 # -*- encoding utf8-*-
-from visuals.utils.prep import setup
-from visuals.utils.funcs import swap, shuffle
+from turtleSort.utils.prep import setup
+from turtleSort.utils.funcs import swap, shuffle
 
-def insertion_sort(lst):
+def insertionsort(lst):
     for i in range(1,len(lst)):
         j,k = i,i-1
         while j > 0 and lst[k].value > lst[j].value:

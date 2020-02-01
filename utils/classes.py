@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# visual_sorting.utils.classes
+# turtleSort.utils.classes
 from turtle import RawTurtle, Screen
 
 

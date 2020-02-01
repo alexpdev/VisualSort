@@ -1,5 +1,4 @@
-import utils
-import sorts
+# turtleSorts top level __init__.py
 
-
-__all__ = utils, sorts
+import turtleSort.utils
+import turtleSort.sorts
