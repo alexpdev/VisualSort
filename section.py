@@ -87,8 +87,6 @@ class Section(RawTurtle):
             "speed" : self._speed,
         }
         sect = Section.create(self.screen,**kwargs)
-        if self.loc:
-            sect.assign(self.loc)
         return sect
 
 

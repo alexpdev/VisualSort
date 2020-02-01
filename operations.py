@@ -21,3 +21,15 @@ def shuffle(lst):
         ints.append(z)
         z += 1
     return True
+
+def switch(a,b):
+    a.remove()
+    b.remove()
+    c = b.sect
+    b.sect = None
+    a.assign(c)
+    a.draw()
+
+def alternate(a,b):
+
+    cpy = a.carbon_copy
