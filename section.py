@@ -116,7 +116,9 @@ class Location:
     def assign(self,sect):
         self.sect = sect
         sect.loc = self
-        sect.assign(self)
+        self.sect.up()
+        self.sect.goto(self.xy)
+        self.sect.down()
 
     def draw(self):
         if self.sect:

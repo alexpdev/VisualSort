@@ -13,7 +13,7 @@ def swap(loca,locb):
 def shuffle(lst):
     l = len(lst)
     ints = list(range(0,l))
-    for z in range(l)
+    for z in range(l):
         ints.remove(z)
         num = random.choice(ints)
         loca,locb = lst[num],lst[z]
