@@ -1,5 +1,6 @@
-from utils import setup
-from operations import swap,shuffle,switch
+# -*- encoding utf8-*-
+from visuals.utils.prep import setup
+from visuals.utils.funcs import swap, shuffle, switch
 
 def quicksort(lst):
     _quicksort(lst,0,len(lst)-1)

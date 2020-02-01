@@ -1,5 +1,6 @@
 # -*- encoding utf8-*-
-from section import Location,Section
+# visual_sorting.utils.prep
+from classes import Location,Section
 from turtle import Screen
 import random
 

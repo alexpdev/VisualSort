@@ -1,5 +1,6 @@
-from utils import setup
-from operations import swap,shuffle
+# -*- encoding utf8-*-
+from visuals.utils.prep import setup
+from visuals.utils.funcs import swap, shuffle
 
 def selection_sort(lst):
     l,z = len(lst),0
