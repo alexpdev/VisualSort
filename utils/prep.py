@@ -1,6 +1,6 @@
 # -*- encoding utf8-*-
 # turtleSort.utils.prep
-from classes import Location,Section
+from turtleSort.utils.classes import Location,Section
 from turtle import Screen
 import random
 

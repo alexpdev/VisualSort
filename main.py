@@ -1,1 +1,1 @@
-from visual.sorts
+from turtleSort.sorts import *
