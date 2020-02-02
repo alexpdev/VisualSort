@@ -1,6 +1,6 @@
 # -*- encoding utf8-*-
-from turtleSort.utils.prep import setup
-from turtleSort.utils.funcs import swap, shuffle
+from ..utils.prep import setup
+from ..utils.funcs import swap, shuffle
 
 def selectionsort(lst):
     l,z = len(lst),0

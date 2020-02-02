@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 # turtleSort.utils.classes
 from turtle import RawTurtle, Screen
+# ((245,10,77),(100,84,90))
+
+OPTIONS = {
+    "size" : (.6,.8),
+    "bgcolor" : "black",
+    "colormode" : 255,
+    "speed" : 0,
+    "tracer" : 1,
+    "delay" : 0,
+    "gradient" : ((240,160,80),(80,160,240)),
+    "width" : 7,
+    "inc" : 7,
+    "gap" : 10,
+}
 
 
 class NotAssigned(Exception):
@@ -29,13 +43,10 @@ class Section(RawTurtle):
         section._color = kwargs["color"]
         section.width = kwargs["width"]
         section.value = kwargs["value"]
-        section.ht()
+        section._speed = kwargs["speed"]
+        section.speed(section._speed)
         section.color(section._color)
-        if "speed" in kwargs:
-            section._speed = kwargs["speed"]
-            section.speed(kwargs["speed"])
-        if "loc" in kwargs:
-            section.assign(kwargs["loc"])
+        section.ht()
         return section
 
     @property
