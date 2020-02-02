@@ -1,4 +1,5 @@
-from prep import setup
-from funcs import shuffle
-from import *
-from
+from .utils.prep import setup
+from .utils.classes import OPTIONS
+from .sorts import *
+
+if __name__ == "__main__":
