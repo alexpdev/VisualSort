@@ -1,7 +1,8 @@
 # -*- encoding utf8-*-
-from ..utils.prep import setup
-from ..utils.funcs import swap, shuffle
+from prep import setup
+from funcs import swap, shuffle,timer
 
+@timer
 def insertionsort(lst):
     for i in range(1,len(lst)):
         j,k = i,i-1

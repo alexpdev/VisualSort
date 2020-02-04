@@ -1,17 +1,18 @@
 # -*- encoding utf8-*-
-# turtleSort.utils.funcs
+# turtleSort.sorts.funcs
 import random
+from time import time
 
-def swap(loca,locb):
+def swap(loca,locb,shuffle=False):
     """ Utility for swapping one of a list's Section item with another in place.
         In: Location objects that contain the Sects for swapping (qty=2) Out: None """
-    loca.remove()
-    locb.remove()
+    loca.remove(shuffle)
+    locb.remove(shuffle)
     seca = loca.sect
     loca.assign(locb.sect)
     locb.assign(seca)
-    loca.draw()
-    locb.draw()
+    loca.draw(shuffle)
+    locb.draw(shuffle)
     return
 
 
@@ -25,9 +26,10 @@ def shuffle(lst):
         num = random.choice(ints)
         ints.remove(num)
         num2 = random.choice(ints)
-        swap(lst[x],lst[num])
-        swap(lst[z-1],lst[num2])
+        swap(lst[z],lst[num],True)
+        swap(lst[z-1],lst[num2],True)
         ints += [z-1,z,num]
+    lst[0].sect.screen.update()
     return
 
 
@@ -40,3 +42,12 @@ def switch(a,b):
     b.sect = None
     a.assign(c)
     a.draw()
+
+def timer(func):
+    def wrapper(seq):
+        shuffle(seq)
+        then = time()
+        func(seq)
+        now = time()
+        print("time: ",now-then)
+    return wrapper

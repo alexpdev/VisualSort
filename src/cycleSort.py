@@ -1,7 +1,8 @@
 # -*- encoding utf8-*-
-from ..utils.prep import setup
-from ..utils.funcs import swap, shuffle
+from prep import setup
+from funcs import swap, shuffle,timer
 
+@timer
 def cyclesort(lst):
     nums,last,val,fin = [i.value for i in lst],0,0,1
     while fin:

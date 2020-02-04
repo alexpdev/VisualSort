@@ -1,21 +1,6 @@
 # -*- coding: utf-8 -*-
 # turtleSort.utils.classes
 from turtle import RawTurtle, Screen
-# ((245,10,77),(100,84,90))
-
-OPTIONS = {
-    "size" : (.6,.8),
-    "bgcolor" : "black",
-    "colormode" : 255,
-    "speed" : 0,
-    "tracer" : 1,
-    "delay" : 0,
-    "gradient" : ((240,160,80),(80,160,240)),
-    "width" : 7,
-    "inc" : 7,
-    "gap" : 10,
-}
-
 
 class NotAssigned(Exception):
     pass
@@ -27,6 +12,7 @@ class Section(RawTurtle):
         self.screen = screen
         self.value = None
         self.loc = None
+        self.trace = True
         self._color = None
         self.width = None
         self._speed = None
@@ -40,13 +26,14 @@ class Section(RawTurtle):
     @classmethod
     def create(cls,screen,**kwargs):
         section = cls(screen)
+        section.ht()
         section._color = kwargs["color"]
         section.width = kwargs["width"]
         section.value = kwargs["value"]
+        section.trace = kwargs["trace"]
         section._speed = kwargs["speed"]
         section.speed(section._speed)
         section.color(section._color)
-        section.ht()
         return section
 
     @property
@@ -68,20 +55,20 @@ class Section(RawTurtle):
         cords = [(x+width,y),(x+width,y+val),(x,y+val),(x,y)]
         return cords
 
-    def remove(self):
+    def remove(self,shuffle=False):
         self.clear()
-        self.screen.update()
+        if not shuffle and not self.trace:
+            self.screen.update()
         return
 
-    def draw(self,color=None,speed=None):
-        self.color(self._color) if not color else self.color(color)
-        self.speed(self._speed) if not speed else self.speed(speed)
+    def draw(self,shuffle=False):
         self.down()
         self.begin_fill()
         for xy in self.poly:
             self.goto(xy)
         self.end_fill()
-        self.screen.update()
+        if not self.trace and not shuffle:
+            self.screen.update()
         return
 
     def assign(self,loc):
@@ -97,6 +84,7 @@ class Section(RawTurtle):
             "color" : self._color,
             "width" : self.width,
             "speed" : self._speed,
+            "trace" : self.trace
         }
         sect = Section.create(self.screen,**kwargs)
         return sect
@@ -130,21 +118,18 @@ class Location:
         self.sect.goto(self.xy)
         self.sect.down()
 
-    def draw(self):
+    def draw(self,shuffle=False):
         if self.sect:
-            self.sect.draw()
+            self.sect.draw(shuffle)
         else:
             raise NotAssigned
 
-    def remove(self):
+    def remove(self,shuffle=False):
         if self.sect:
-            self.sect.remove()
+            self.sect.remove(shuffle)
         else:
             raise NotAssigned
 
     def carbon_copy(self):
         loc = Location(self.xy,self.index)
-        if self.sect:
-            sect = self.sect.carbon_copy()
-            loc.assign(sect)
         return loc

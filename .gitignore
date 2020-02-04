@@ -7,8 +7,8 @@ pids
 *.pid
 *.seed
 
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+# Virtual enviornment and temp directories
+env/
 .eslintcache
 other/
 

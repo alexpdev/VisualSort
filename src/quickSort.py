@@ -1,7 +1,8 @@
 # -*- encoding utf8-*-
-from ..utils.prep import setup
-from ..utils.funcs import swap, shuffle, switch
+from prep import setup
+from funcs import swap, shuffle, switch, timer
 
+@timer
 def quicksort(lst):
     _quicksort(lst,0,len(lst)-1)
 
