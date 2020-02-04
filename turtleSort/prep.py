@@ -1,7 +1,7 @@
 # -*- encoding utf8-*-
 # turtleSort.utils.prep
-from config import OPTIONS
-from classes import Location, Section
+from turtleSort.config import OPTIONS
+from turtleSort.classes import Location, Section
 from turtle import Screen
 import random
 

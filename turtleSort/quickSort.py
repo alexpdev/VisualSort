@@ -1,6 +1,6 @@
-# -*- encoding utf8-*-
-from prep import setup
-from funcs import swap, shuffle, switch, timer
+# -*- coding utf8-*-
+from turtleSort.prep import setup
+from turtleSort.funcs import swap, shuffle, switch, timer
 
 @timer
 def quicksort(lst):

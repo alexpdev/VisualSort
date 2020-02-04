@@ -1,6 +1,6 @@
 # -*- encoding utf8-*-
-from prep import setup
-from funcs import swap, shuffle, timer
+from turtleSort.prep import setup
+from turtleSort.funcs import swap, shuffle, timer
 
 def bubblesort1(lst):
     l,z = len(lst),1

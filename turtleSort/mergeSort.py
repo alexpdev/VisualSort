@@ -1,6 +1,6 @@
 # -*- encoding utf8-*-
-from prep import setup
-from funcs import shuffle,timer
+from turtleSort.prep import setup
+from turtleSort.funcs import shuffle,timer
 
 @timer
 def mergesort(seq):
