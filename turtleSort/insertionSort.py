@@ -2,6 +2,7 @@
 from turtleSort.prep import setup
 from turtleSort.funcs import swap, shuffle,timer
 
+
 @timer
 def insertionsort(lst):
     for i in range(1,len(lst)):
