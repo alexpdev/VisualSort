@@ -5,7 +5,7 @@ from turtleSort.funcs import shuffle,timer
 @timer
 def mergesort(seq):
     pos = [i.carbon_copy() for i in seq]
-    _mergesort(seq)
+    return _mergesort(seq)
 
 def _mergesort(seq):
     if len(seq) <= 1: return seq
@@ -48,8 +48,3 @@ def duplic(copy,seqa):
     loc.assign(sec)
     return loc
 
-if __name__ == "__main__":
-    seq,screen = setup()
-    # shuffle(seq)
-    mergesort(seq)
-    screen.mainloop()

@@ -1,9 +1,11 @@
 # -*- encoding utf8-*-
 # turtleSort.utils.prep
-from turtleSort.config import OPTIONS
-from turtleSort.classes import Location, Section
 from turtle import Screen
 import random
+
+from turtleSort.config import OPTIONS
+from turtleSort.classes import Location, Section
+
 
 def gen_color_random(units):
     start = 0
@@ -77,7 +79,3 @@ def get_kws(value,colors,**kwargs):
     else:
         _keys["trace"] = True
     return _keys
-
-if __name__ == "__main__":
-    kwargs = OPTIONS
-    seq,screen = setup(**kwargs)

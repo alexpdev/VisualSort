@@ -1,9 +1,9 @@
 # turtleSort Settings Configuration
 TITLE = "Turtle Graphics Sorting Demonstrations"
-VERSION = 0.1
+VERSION = 0.2
 LISCENSE = "MIT"
 # Size of window Generated on your screen
-SCREEN_SIZE =  (.6,.8)
+SCREEN_SIZE =  (.9,.9)
 # Location of the window generated on your screen
 SCREEN_POSITION = (0,0)
 # Background Color for screen, defaults to black but can use (r,g,b) values
@@ -21,7 +21,7 @@ DELAY =  0
 # Color range for Gradient Color Scheme
 GRADIENT =  [(245,10,77),(100,84,90)]
 # The Vertical Distance added to each progressive color block
-INCREMENT =  7
+INCREMENT =  6
 # Horizontal distance of the individual units in sequence
 GAP =  10
 # Horizantal distance if color block

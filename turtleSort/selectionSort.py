@@ -12,11 +12,3 @@ def selectionsort(lst):
         swap(lst[i],lst[current])
     return
 
-
-
-
-if __name__ == "__main__":
-    seq,screen = setup()
-    shuffle(seq)
-    selectionsort(seq)
-    screen.mainloop()
