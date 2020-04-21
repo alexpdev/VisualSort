@@ -1,31 +1,17 @@
 # turtleSort Settings Configuration
 TITLE = "Turtle Graphics Sorting Demonstrations"
 VERSION = 0.2
-LISCENSE = "MIT"
+LISCENSE = "GNU GPLv3"
 # Size of window Generated on your screen
-SCREEN_SIZE =  (.9,.9)
-# Location of the window generated on your screen
-SCREEN_POSITION = (0,0)
+SCREEN_SIZE =  (.96,.92,0,0)
 # Background Color for screen, defaults to black but can use (r,g,b) values
 BACKGROUND =  "black"
-# COLORMODE of the screen options are 0-1 or 0-255
-COLORMODE =  255
-# Speed of animations
-SPEED =  0
-# If True then It will generate a random color of each unit instead of gradient
-RANDOM_COLOR = False
 # Number of animation to perform per screen update  Default = 1
-TRACER =  1
-# The speed of the animations
-DELAY =  0
-# Color range for Gradient Color Scheme
-GRADIENT =  [(245,10,77),(100,84,90)]
+TRACER =  10
 # The Vertical Distance added to each progressive color block
-INCREMENT =  6
-# Horizontal distance of the individual units in sequence
-GAP =  10
+INCREMENT =  4
 # Horizantal distance if color block
-WIDTH =  7
+WIDTH =  8
 """                         *
                     *       *
             *       *       *
@@ -35,4 +21,10 @@ GAP = 5 WIDTH = 3  INCREMENT = 1
 
 
 
-OPTIONS = {"size":SCREEN_SIZE,"random":RANDOM_COLOR,"s_pos":SCREEN_POSITION,"bgcolor":BACKGROUND,"colormode":COLORMODE,"speed":SPEED,"tracer":TRACER,"delay":DELAY,"gradient":GRADIENT,"width":WIDTH,"inc":INCREMENT,"gap":GAP}
+OPTIONS = {
+    "size":SCREEN_SIZE,
+    "bgcolor":BACKGROUND,
+    "tracer":TRACER,
+    "dist":WIDTH,
+    "inc":INCREMENT,
+    }

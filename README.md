@@ -24,7 +24,3 @@ Python turtle graphics framework.
 2. ensure Python v3.* is installed and working
 3. enter the following in the terminal commandline
 
-*windows*
-``` python "path\to\project\directory\bin\TurtleSort_v0.2.py ```
-*all other systems*
-``` python3 "/path/to/project/directory/bin/TurtleSort_v0.2.py ```

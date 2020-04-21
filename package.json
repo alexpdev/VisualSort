@@ -1,10 +1,5 @@
 {
-  "name": "turtlesort",
+  "name": "visual-sorting",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "license": "GNU GPLv3"
 }

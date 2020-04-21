@@ -2,9 +2,10 @@
 
 ## Supported Versions
 
-| Version | Supported |
-| ------- | ----------|
-| 0.1.x   | __Unstable__  |
+| Version | Supported     |
+| ------- | ----------    |
+|   0.1.x | __Unstable__  |
+|   1.x   | __stable__    |
 
 ## Reporting a Vulnerability
 
