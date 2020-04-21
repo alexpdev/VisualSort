@@ -1,12 +1,7 @@
-import os
-import sys
 import random
 from turtle import Screen, RawTurtle
 from time import time
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from temp.config import OPTIONS
-from temp.sorting import (bubblesort,cyclesort,selectionsort,
-                          insertionsort,mergesort,quicksort)
+
 
 def gen_color():
     choices = ["1","2","3","4","5","6","7","8","9","0","A","B","C","D","E","F"]
@@ -70,6 +65,7 @@ class Bar(RawTurtle):
         self.end_fill()
         self.up()
 
+
 class Stage(list):
     def __init__(self,*args):
         super(list,self).__init__(*args)
@@ -127,9 +123,7 @@ class Stage(list):
         for i in range(x):
             self.shuffle()
 
-
     def shuffle(self):
-        self.window.set_tracer(25)
         choices = list(range(len(self)))
         while len(choices) > 1:
             num1 = random.choice(choices)
@@ -172,26 +166,3 @@ class Window:
         stage_color = gen_color()
         self.stage.drawstage(stage_corners,stage_color,self)
         self.stage.fill_positions(self.width,self.height,self.dist,self.inc)
-
-def setup(**kwargs):
-    window = Window(**kwargs)
-    window.stage.shuff_x(2)
-    bubblesort(window.stage)
-    window.stage.shuff_x(2)
-    cyclesort(window.stage)
-    window.stage.shuff_x(2)
-    selectionsort(window.stage)
-    window.stage.shuff_x(2)
-    insertionsort(window.stage)
-    window.stage.shuff_x(2)
-    mergesort(window.stage)
-    window.stage.shuff_x(2)
-    quicksort(window.stage)
-    window.stage.shuff_x(2)
-
-    window.screen.mainloop()
-
-
-
-
-setup(**OPTIONS)
