@@ -42,7 +42,6 @@ def _cyclesort(stage,pos):
         stage.redraw(bar1,bar2)
         return _cyclesort(stage,pos)
 
-
 @timer
 def selectionsort(stage):
     new_vals = []
@@ -68,7 +67,6 @@ def insertionsort(stage):
                 stage.redraw(bar1,bar2)
             pos -= 1
     return
-
 
 @timer
 def mergesort(stage):

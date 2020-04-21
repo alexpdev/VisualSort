@@ -67,6 +67,7 @@ class Bar(RawTurtle):
 
 
 class Stage(list):
+
     def __init__(self,*args):
         super(list,self).__init__(*args)
         self.vals = []
