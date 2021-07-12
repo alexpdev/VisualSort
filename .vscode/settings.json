@@ -9,6 +9,6 @@
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.unittestEnabled": false,
-    "python.pythonPath": "C:\\Program Files\\Python38\\python.exe",
+    "python.pythonPath": "env\\Scripts\\python.exe",
     "python.testing.promptToConfigure": false
 }
