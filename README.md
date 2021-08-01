@@ -14,7 +14,7 @@ Author: alexpdev
 
 Python >= v3.0
 
-### Installing BlackJack
+### Installing
 
 To install, follow these steps:
 
@@ -53,5 +53,3 @@ GNU GPL v3
 | Merge Sort | Active |
 | Quick Sort | Active |
 | Cycle Sort | Active |
-| Shell Sort | Developing |
-| Partition Sort | Developing |
