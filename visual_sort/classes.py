@@ -150,7 +150,11 @@ class Window:
         self._tracer = tracer
         self.screen.bgcolor(bgcolor)
         self.screen.tracer(tracer)
-        self.create_stage(dist)
+        self.create_stage(self.dist)
+        self.title = Bar(self,None)
+        self.title.goto(0,self.height - 50)
+
+
 
     def set_tracer(self,num):
         self.screen.tracer(num)

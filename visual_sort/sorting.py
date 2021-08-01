@@ -1,4 +1,4 @@
-from time import time
+from time import time, sleep
 
 def timer(func):
     def wrapper(*args,**kwargs):
@@ -40,6 +40,7 @@ def _cyclesort(stage,pos):
     else:
         bar1,bar2 = stage.swap(pos,p)
         stage.redraw(bar1,bar2)
+        sleep(.2)
         return _cyclesort(stage,pos)
 
 @timer
