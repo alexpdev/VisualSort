@@ -35,12 +35,14 @@ class Bar(RawTurtle):
 
     def copy(self):
         bar = Bar(self.window,self.stage,self.value)
-        bar.setposition(self.idx)
+        # bar.setposition(self.idx)
+        # self.screen.update()
         return bar
 
     def remove(self):
         self.clear()
         self.up()
+        # self.screen.update()
 
     def setposition(self,idx):
         self.idx = idx
