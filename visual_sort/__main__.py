@@ -4,7 +4,7 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from visual_sort.config import OPTIONS
+# from visual_sort.conf import OPTIONS
 from visual_sort.classes import Window, Bar, Stage
 from visual_sort.sorting import ( bubblesort, cyclesort, selectionsort,
                                   insertionsort, mergesort, quicksort )
