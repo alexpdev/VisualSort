@@ -1,30 +1,5 @@
-import random
-from time import time
+from visual_sort.utils import timer
 
-def timer(func):
-    def wrapper(stage):
-        stage = stage
-        shuffle(stage)
-        shuffle(stage)
-        then = time()
-        func(stage)
-        print(f"{func.__name__} Duration: {time() - then} seconds.")
-        return stage
-    return wrapper
-
-def shuffle(stage):
-    l = list(range(len(stage)))
-    for _ in range(200):
-        r1 = random.choice(l)
-        l.remove(r1)
-        r2 = random.choice(l)
-        l.append(r1)
-        current1 = stage[r1]
-        current2 = stage[r2]
-        del stage[r1]
-        del stage[r2]
-        stage[r1] = current2
-        stage[r2] = current1
 
 @timer
 def insertionsort(stage):
@@ -102,30 +77,33 @@ def quicksort(stage):
 
 def _quicksort(stage,lo,hi):
     if lo < hi:
+        print(stage,"\n")
         pivot = partition(stage,lo,hi)
+        print(stage,"\n")
         _quicksort(stage,lo,pivot-1)
+        print(stage,"\n")
         _quicksort(stage,pivot+1,hi)
+        print(stage,"\n")
 
 def partition(stage,lo,hi):
-    index = lo - 1
-    for j in range(lo+1,hi):
-        if stage[j] < stage[hi]:
+    pivot = stage[hi]
+    index = lo
+    for j in range(lo,hi):
+        if stage[j] < pivot and j != index:
+            if j != index:
+                block1 = stage[j]
+                block2 = stage[index]
+                del stage[j]
+                del stage[index]
+                stage[j] = block2
+                stage[index] = block1
             index += 1
-            print(j)
-            print(index)
-            item1 = stage[j]
-            item2 = stage[index]
-            del stage[j]
-            del stage[index]
-            stage[j] = item2
-            stage[index] = item1
-    item1 = stage[hi]
-    item2 = stage[index+1]
+    block = stage[index]
     del stage[hi]
-    del stage[index + 1]
-    stage[hi] = item2
-    stage[index + 1] = item1
-    return index + 1
+    del stage[index]
+    stage[hi] = block
+    stage[index] = pivot
+    return index
 
 
 @timer

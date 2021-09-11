@@ -9,13 +9,13 @@ SCREEN_SIZE =  (.96,.92,0,0)
 # Background Color for screen, defaults to black but can use (r,g,b) values
 BACKGROUND =  "black"
 # Number of animation to perform per screen update  Default = 1
-TRACER =  10
+TRACER =  2
 # The speed of pen drawing the vector animation 0-10. Set to 0 for no animation.
 SPEED = 0
 # Delay for animation to complete.
 DELAY = 0
 # The Vertical Distance added to each progressive color block
-BLOCK_HEIGHT = 5
+BLOCK_HEIGHT = 19
 # Horizantal distance of color block
-BLOCK_WIDTH =  7
+BLOCK_WIDTH =  35
 
