@@ -11,9 +11,9 @@ BACKGROUND =  "black"
 # Number of animation to perform per screen update  Default = 1
 TRACER =  2
 # The speed of pen drawing the vector animation 0-10. Set to 0 for no animation.
-SPEED = 0
+SPEED = 10
 # Delay for animation to complete.
-DELAY = 0
+DELAY = 1
 # The Vertical Distance added to each progressive color block
 BLOCK_HEIGHT = 19
 # Horizantal distance of color block

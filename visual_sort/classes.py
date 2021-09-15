@@ -1,175 +1,132 @@
-import random
-from turtle import Screen, RawTurtle
-from time import time
+from turtle import RawTurtle
+from visual_sort import utils
 
+class Block(RawTurtle):
 
-def gen_color():
-    choices = ["1","2","3","4","5","6","7","8","9","0","A","B","C","D","E","F"]
-    random.shuffle(choices)
-    color = "#"
-    for i in range(3):
-        char = random.choice(choices)
-        color += char
-        choices.remove(char)
-        random.shuffle(choices)
-    return color
-
-class Bar(RawTurtle):
-
-    def __init__(self,window,stage,value=None):
-        RawTurtle.__init__(self,window.screen)
+    def __init__(self, screen, stage, height, base, color):
+        RawTurtle.__init__(self,screen)
+        self._color_ = color
+        self.color(color)
+        self.speed(10)
+        self.height = height
+        self.value = str(height)
         self.stage = stage
-        self.window = window
-        self.screen = window.screen
-        self.value = value
-        self.color(gen_color())
-        self.speed(0)
+        self.base = base
+        self.ypos = (self.base, self.base + self.height)
         self.ht()
         self.up()
 
+    def __gt__(self, other):
+        return self.height > other.height
+
+    def __lt__(self, other):
+        return self.height < other.height
+
+    def __le__(self, other):
+        return self.height <= other.height
+
+    def __ge__(self, other):
+        return self.height >= other.height
+
+    def __eq__(self, other):
+        return self.height == other.height
+
+    def __ne__(self, other):
+        return self.height != other.height
+
     def __str__(self):
-        return f"({self.idx},{self.value})"
+        return self.value
 
     def __repr__(self):
-        return str(self)
+        return str(self.height)
 
-    def copy(self):
-        bar = Bar(self.window,self.stage,self.value)
-        # bar.setposition(self.idx)
-        # self.screen.update()
-        return bar
+    @property
+    def index(self):
+        return self.stage.index(self)
 
-    def remove(self):
-        self.clear()
-        self.up()
-        # self.screen.update()
+    def position(self):
+        return self.stage.pos(self.index)
 
-    def setposition(self,idx):
-        self.idx = idx
-        self.up()
-        return
+    def corners(self, pos=None):
+        y1, y2 = self.ypos
+        if pos:
+            x1, x2 = pos
+        else:
+            x1, x2 = self.position()
+        return [(x1,y1),(x2,y1),(x2,y2),(x1,y2)]
 
-    def corners(self):
-        x1,x2 = self.stage[self.idx]
-        x1, x2 = x1 + 1, x2 - 1
-        y1 = -self.window.height
-        y2 = y1 + self.value
-        corners = ((x1,y1),(x2,y1),(x2,y2),(x1,y2))
-        return corners
 
-    def draw(self):
-        corners = self.corners()
-        self.goto(corners[0])
+    def draw(self, pos=None):
+        corners = self.corners(pos=pos)
+        start = corners[-1]
+        self.goto(*start)
         self.down()
         self.begin_fill()
-        for i in corners:
-            self.goto(i)
+        for corner in corners:
+            self.goto(*corner)
         self.end_fill()
         self.up()
 
+    @classmethod
+    def new(cls, block):
+        screen = block.screen
+        stage = block.stage
+        height = block.height
+        base = block.base
+        color = block._color_
+        block2 = cls(screen, stage, height, base, color)
+        block.clear()
+        del block
+        return block2
 
 class Stage(list):
 
-    def __init__(self,*args):
-        super(list,self).__init__(*args)
-        self.vals = []
+    def __init__(self, arg=[]):
+        super().__init__(arg)
+        self.screen = None
+        self.positions = []
 
-    def drawstage(self,corners,color,window):
-        self.window = window
-        self.bar = Bar(self.window,self)
-        self.bar.up()
-        self.bar.ht()
-        self.bar.color(color)
-        self.bar.goto(corners[0])
-        self.bar.down()
-        self.bar.begin_fill()
-        for corner in corners:
-            self.bar.goto(corner)
-        self.bar.end_fill()
+    @classmethod
+    def create(cls, screen):
+        stage = cls()
+        stage.positions = []
+        stage.screen = screen
+        start = screen.start
+        for i in range(screen.blocks):
+            stop = start + screen.blockwidth
+            position = (start,stop)
+            stage.positions.append(position)
+            start = stop + 2
+            height = screen.increment * (i+1)
+            color = utils.gen_color()
+            block = Block(screen, stage, height, -screen.base, color)
+            block.draw(pos=position)
+            stage.append(block)
+        return stage
 
-    def fill_positions(self,width,height,dist,inc):
-        start,counter = -width,1
-        while start < width:
-            n = start + dist
-            val = inc * counter
-            self.append((start,n))
-            bar = Bar(self.window,self,val)
-            idx = len(self)
-            bar.setposition(idx-1)
-            self.vals.append(bar)
-            counter += 1
-            start = n
-        for pos in self.vals:
-            pos.draw()
+    def __setitem__(self, idx, other):
+        self[idx].clear()
+        other.clear()
+        other = Block.new(other)
+        super().__setitem__(idx, other)
+        self[idx].draw(pos=self.positions[idx])
 
-    def clear_stage(self):
-        for bar in self.vals:
-            bar.remove()
+    def __delitem__(self, idx):
+        self[idx].clear()
 
-    def swap(self,val1,val2):
-        bar1 = self.vals[val1]
-        bar2 = self.vals[val2]
-        self.vals[val1] = bar2
-        bar2.setposition(val1)
-        self.vals[val2] = bar1
-        bar1.setposition(val2)
-        return bar1,bar2
+    def pos(self,idx):
+        return self.positions[idx]
 
-    def redraw(self,bar1,bar2):
-        bar1.remove()
-        bar2.remove()
-        bar1.draw()
-        bar2.draw()
-        return
+    def __contains__(self,other):
+        return other.value in [i.value for i in self]
 
-    def shuff_x(self,x):
-        for i in range(x):
-            self.shuffle()
+    def index(self, item):
+        for i in range(len(self)):
+            if self[i].value == item.value:
+                return i
+        return None
 
-    def shuffle(self):
-        choices = list(range(len(self)))
-        while len(choices) > 1:
-            num1 = random.choice(choices)
-            choices.remove(num1)
-            num2 = random.choice(choices)
-            choices.remove(num2)
-            b1,b2 = self.swap(num1,num2)
-            self.redraw(b1,b2)
-        self.window.reset_tracer()
-        return
-
-class Window:
-
-    def __init__(self,size=None,inc=None,bgcolor=None,tracer=None,dist=12):
-        self.screen = Screen()
-        self.screen.setup(*size)
-        self.win_height = self.screen.window_height()*.95
-        self.win_width = self.screen.window_width()*.95
-        self.height = self.win_height / 2
-        self.width = ((self.win_width//dist)*dist)/2
-        self.dist = dist
-        self.inc = inc
-        self._tracer = tracer
-        self.screen.bgcolor(bgcolor)
-        self.screen.tracer(tracer)
-        self.create_stage(self.dist)
-        self.title = Bar(self,None)
-        self.title.goto(0,self.height - 50)
-
-
-
-    def set_tracer(self,num):
-        self.screen.tracer(num)
-
-    def reset_tracer(self):
-        self.screen.tracer(self._tracer)
-
-    def create_stage(self,d):
-        self.stage = Stage()
-        width = self.width
-        height = self.height
-        stage_corners = [(-width-6,-height),(-width,-height-18),
-                         (width,-height-18),(width+6,-height)]
-        stage_color = gen_color()
-        self.stage.drawstage(stage_corners,stage_color,self)
-        self.stage.fill_positions(self.width,self.height,self.dist,self.inc)
+    def extend(self, other):
+        for i in range(len(other)):
+            self.positions.append(other.positions[i])
+            self.append(other[i])

@@ -6,12 +6,12 @@ from visual_sort.algorithms import selectionsort, insertionsort, bubblesort, cyc
 
 if __name__ == '__main__':
     args = [conf.SCREEN_SIZE, conf.BACKGROUND, conf.TRACER, conf.DELAY]
-    screen = get_screen(*args)
+    screen = get_screen()
     stage = Stage.create(screen)
-    # insertionsort(stage)
-    # selectionsort(stage)
-    # bubblesort(stage)
-    # cyclesort(stage)
+    insertionsort(stage)
+    selectionsort(stage)
+    bubblesort(stage)
+    cyclesort(stage)
     quicksort(stage)
     mergesort(stage)
     stage.clear()

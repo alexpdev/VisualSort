@@ -7,30 +7,16 @@ from visual_sort import conf
 def gen_color():
     return "#" + "".join([random.choice(string.hexdigits) for i in range(6)])
 
-def screen_extend(screen):
-    winHeight = screen.window_height()*.95
-    winWidth = screen.window_width()*.95
-    screen.halfh = winHeight / 2
-    screen.halfw = winWidth / 2
-
 def shuffle(stage):
-    t = stage.screen.tracer()
-    stage.screen.tracer(20)
     l = len(stage)
     choices = list(range(l))
     for i in range(3):
         for i in range(l):
-            del choices[i]
             j = random.choice(choices)
-            choices.insert(i,i)
             block1 = stage[i]
             block2 = stage[j]
-            del stage[j]
-            del stage[i]
             stage[i] = block2
             stage[j] = block1
-    stage.screen.tracer(t)
-
 
 def timer(func):
     def wrapper(stage):
@@ -43,18 +29,19 @@ def timer(func):
         return stage
     return wrapper
 
-
-def get_screen(screen_size, background, tracer, delay):
+def get_screen():
     screen = Screen()
-    screen.setup(*screen_size)
-    screen.bgcolor(background)
-    screen.tracer(tracer)
-    screen.delay(delay)
-    winHeight = screen.window_height()*.95
-    winWidth = screen.window_width()*.95
-    screen.base = winHeight // 2
-    blockWidth = screen.blockWidth = conf.BLOCK_WIDTH
-    blockHeight = screen.blockHeight = conf.BLOCK_HEIGHT
-    screen.start = -(winWidth // 2) + blockWidth
-    screen.blocks = int((winWidth - ((blockWidth + 2) * 2)) // (blockWidth + 2))
+    screen.setup(*conf.SCREEN_SIZE)
+    screen.bgcolor(conf.BACKGROUND)
+    screen.tracer(conf.TRACER)
+    screen.delay(conf.DELAY)
+    screen.winheight = screen.window_height()*.95
+    screen.winwidth = screen.window_width()*.95
+    screen.width = screen.winwidth // 2
+    screen.height = screen.winheight // 2
+    screen.blockwidth = conf.BLOCK_WIDTH
+    screen.increment = screen.blockheight = conf.BLOCK_HEIGHT
+    screen.base = screen.height
+    screen.start = -screen.width + screen.blockwidth
+    screen.blocks = int(((screen.width * 2) - ((screen.blockwidth + 2)*3))//(screen.blockwidth + 2))
     return screen

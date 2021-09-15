@@ -1,7 +1,14 @@
-#! /usr/bin/python3
-# -*- coding: utf-8 -*-
-from visual_sort import Window, setup, OPTIONS
+from visual_sort.classes import Stage
+from visual_sort.sorting import insertionsort, selectionsort, bubblesort, quicksort, mergesort, cyclesort
+from visual_sort.utils import get_screen
+
 
 if __name__ == '__main__':
-    window = setup(**OPTIONS)
-    window.screen.mainloop()
+    screen = get_screen()
+    stage = Stage.create(screen)
+    cyclesort(stage)
+    # insertionsort(stage)
+    selectionsort(stage)
+    # bubblesort(stage)
+    quicksort(stage)
+    mergesort(stage)

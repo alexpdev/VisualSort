@@ -154,7 +154,7 @@ class Stage:
             block.clear()
 
     def get_block(self, i, screen):
-        increment = screen.blockHeight * (i+1)
+        increment = screen.blockheight * (i+1)
         block = Block(screen, -screen.base, increment, parent=self)
         block.color(gen_color())
         block.speed(conf.SPEED)
@@ -164,17 +164,14 @@ class Stage:
     @classmethod
     def create(cls, screen):
         stage = Stage(screen)
-        t = screen.tracer()
-        screen.tracer(15)
         start = screen.start
         length = screen.blocks
         for i in range(screen.blocks):
-            stop = start + screen.blockWidth
+            stop = start + screen.blockwidth
             stage.positions[i] = Position(i, start, stop, -screen.base)
             block = stage.idx[i] = stage.get_block(i, screen)
             stage.keys[block.value] = i
             block.draw()
             start = stop + 2
-        screen.tracer(t)
         return stage
 
