@@ -15,7 +15,7 @@ SPEED = 10
 # Delay for animation to complete.
 DELAY = 1
 # The Vertical Distance added to each progressive color block
-BLOCK_HEIGHT = 19
+BLOCK_HEIGHT = 6
 # Horizantal distance of color block
-BLOCK_WIDTH =  35
+BLOCK_WIDTH =  10
 

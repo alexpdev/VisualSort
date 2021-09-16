@@ -1,7 +1,6 @@
-import weakref
 import random as rand
 from turtle import RawTurtle
-from visual_sort import conf
+from visual_sort import utils
 
 def gen_color():
     chars = "123456789ABCDEF"
@@ -22,12 +21,13 @@ class Position:
 
 
 class Block(RawTurtle):
-    def __init__(self, screen, base, height, parent=None):
+    def __init__(self, screen, index=None, base=None, height=None, parent=None):
         RawTurtle.__init__(self,screen)
         self.base = base
         self.height = height
         self.value = str(height)
         self.stage = parent
+        self.index = index
         self.ht()
         self.up()
 
@@ -38,7 +38,9 @@ class Block(RawTurtle):
         return repr(self.value)
 
     def __eq__(self, other):
-        return other.height == self.height
+        if isinstance(other, type(self)):
+            return other.height == self.height
+        return False
 
     def __gt__(self, other):
         return self.height > other.height
@@ -52,18 +54,23 @@ class Block(RawTurtle):
     def __le__(self, other):
         return self.height <= other.height
 
-    def __le__(self, other):
-        return self.height <= other.height
-
     def __ne__(self, other):
-        return self.height != other.height
+        if isinstance(other, type(self)):
+            return self.height != other.height
+        return True
+
+    def setindex(self, idx):
+        self.index = idx
+
+    def delindex(self):
+        self.index = None
 
     def yends(self):
         top = self.base + self.height
         return (top, self.base)
 
     def xends(self):
-        return self.stage.find_positions(self.value)
+        return self.stage.positions[self.index]
 
     def corners(self):
         left, right = self.xends()
@@ -82,96 +89,62 @@ class Block(RawTurtle):
         self.end_fill()
         self.up()
 
-
 class Stage:
+
+    @classmethod
+    def create(cls, screen):
+        stage = cls(screen)
+        start = screen.start
+        blocks = screen.blocks
+        for i in range(blocks):
+            stop = start + screen.blockwidth
+            stage.positions.append((start,stop))
+            base = -screen.base
+            height = screen.increment * (i+1)
+            color = utils.gen_color()
+            block = Block(screen, base=base, index=i, height=height, parent=stage)
+            block.color(color)
+            stage.blocks.append(block)
+            block.draw()
+            start = stop + 2
+        return stage
 
     def __init__(self, screen):
         self.screen = screen
-        self.positions = dict()
-        self.blocks = dict()
-        self.idx = dict()
-        self.keys = dict()
-        self.cached = None
+        self.positions = []
+        self.blocks = []
+
+    def __getitem__(self, idx):
+        return self.blocks[idx]
+
+    def __setitem__(self, idx, other):
+        if other.index not in [idx, None]:
+            other.clear()
+            self.blocks[other.index] = None
+        if self.blocks[idx] != None:
+            self.blocks[idx].clear()
+            self.blocks[idx].delindex()
+        self.blocks[idx] = other
+        self.blocks[idx].setindex(idx)
+        other.draw()
 
     def __str__(self):
-        return str([self.idx[k] for k in range(len(self.idx))])
+        return str([i.value for i in self.blocks])
 
     def __repr__(self):
         return str(self)
 
-    def __getitem__(self, key):
-        if isinstance(key, int):
-            return self.idx[key]
-        return self.keys[key]
-
-    def __setitem__(self, key, block):
-        block.clear()
-        if item := self.idx[key]:
-            item.clear()
-            self.keys[item.value] = None
-            self.cached = (key, item.value)
-        self.idx[key] = block
-        self.keys[block.value] = key
-        block.draw()
-        return
-
-    def __delitem__(self, key):
-        block = self.idx[key]
-        self.idx[key] = None
-        self.keys[block.value] = None
-        block.clear()
-        self.cached = (key, block.value)
-
     def __len__(self):
-        return len(self.positions)
-
-    def __contains__(self, block):
-        if isinstance(block, str):
-            return self.keys[block] is not None
-        return self.keys[block.value] is not None
+        return len(self.blocks)
 
     def __iter__(self):
         self.n = 0
         return self
 
     def __next__(self):
-        if self.n >= len(self.positions) or self.n < 0:
+        if self.n >= len(self.blocks) or self.n < 0:
             raise StopIteration
         block = self.idx[self.n]
         self.n += 1
         return (block)
-
-    def find_positions(self, value):
-        idx = self.keys[value]
-        pos = self.positions[idx]
-        return pos.start, pos.stop
-
-    def update(self):
-        self.screen.update()
-
-    def clear(self):
-        for block in self.idx.values():
-            block.clear()
-
-    def get_block(self, i, screen):
-        increment = screen.blockheight * (i+1)
-        block = Block(screen, -screen.base, increment, parent=self)
-        block.color(gen_color())
-        block.speed(conf.SPEED)
-        self.blocks[block.value] = block
-        return block
-
-    @classmethod
-    def create(cls, screen):
-        stage = Stage(screen)
-        start = screen.start
-        length = screen.blocks
-        for i in range(screen.blocks):
-            stop = start + screen.blockwidth
-            stage.positions[i] = Position(i, start, stop, -screen.base)
-            block = stage.idx[i] = stage.get_block(i, screen)
-            stage.keys[block.value] = i
-            block.draw()
-            start = stop + 2
-        return stage
 

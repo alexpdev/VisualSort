@@ -20,12 +20,20 @@ def shuffle(stage):
 
 def timer(func):
     def wrapper(stage):
-        stage = stage
         shuffle(stage)
+        t,d = stage.screen.tracer(), stage.screen.delay()
+        if func.__name__ == "cyclesort":
+            stage.screen.tracer(1)
+            stage.screen.delay(0)
+        if func.__name__ == "mergesort":
+            stage.screen.tracer(1)
+            stage.screen.delay(0)
         then = time()
         func(stage)
         print(f"{func.__name__} Duration: {time() - then} seconds.")
-        sleep(.8)
+        stage.screen.tracer(t)
+        stage.screen.delay(d)
+        sleep(.4)
         return stage
     return wrapper
 
