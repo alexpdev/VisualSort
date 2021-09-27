@@ -123,11 +123,11 @@ class Stage:
             stage.positions.append((start,stop))
             base = -screen.base
             height = screen.increment * (i+1)
-            color = utils.gen_color()
+            color = next(screen.gradient)
             block = Block(screen, base=base, index=i, height=height, parent=stage, color=color)
             stage.blocks.append(block)
             block.draw()
-            start = stop + 2
+            start = stop + 1
         stage.get_pen()
         return stage
 
@@ -155,6 +155,7 @@ class Stage:
         self.screen = screen
         self.positions = []
         self.blocks = []
+        self.operations = 0
         self.pen = None
 
     def get_pen(self):
@@ -168,9 +169,11 @@ class Stage:
         self.pen.down()
 
     def __getitem__(self, idx):
+        # self.operations += 1
         return self.blocks[idx]
 
     def __setitem__(self, idx, other):
+        # self.operations += 1
         if other.index not in [idx, None]:
             other.clear()
             self.blocks[other.index] = None
@@ -180,6 +183,8 @@ class Stage:
         self.blocks[idx] = other
         self.blocks[idx].setindex(idx)
         other.draw()
+        # if self.operations % 100 == 0:
+        self.screen.update()
 
     def __str__(self):
         return str([i.value for i in self.blocks])

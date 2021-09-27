@@ -3,9 +3,56 @@ import string
 from turtle import Screen
 from time import time, sleep
 from visual_sort import conf
+import itertools as it
+import random
+import sys
 
-def gen_color():
+cdict = {}
+def colordict():
+    for i in range(16):
+        cdict[i] = string.hexdigits[i]
+        cdict[string.hexdigits[i]] = i
+    return cdict
+
+def hextodec(string):
+    if len(cdict) == 0:
+        colordict()
+    rgb, string = [], string[1:].lower()
+    val = 0
+    for _ in range(3):
+        v = cdict[string[val]] * 16
+        v += cdict[string[val+1]]
+        rgb.append(v/255)
+        val += 2
+    return tuple(rgb)
+
+
+def interpolateColor(color1, color2, factor=0.5):
+    result = color1[:]
+    for i in range(3):
+        result[i] = result[i] + factor * (color2[i] - color1[i])
+    return result
+
+
+def interpolateColors(color1, color2, steps):
+    stepFactor = 1 / (steps - 1)
+    color1, color2 = [list(i) for i in [color1, color2]]
+    for i in range(steps):
+        yield interpolateColor(color1, color2, stepFactor * i)
+
+def gradient(colors, blocks):
+    step = gap = blocks // (len(colors) - 1)
+    colors = [hextodec(color) for color in colors]
+    for i in range(len(colors) - 1):
+        c1 = colors[i]
+        c2 = colors[i+1]
+        for color in interpolateColors(c1,c2,gap+3):
+            yield color
+
+
+def randcolor():
     return "#" + "".join([random.choice(string.hexdigits) for i in range(6)])
+
 
 def Shuffle(stage):
     l = len(stage)
@@ -18,11 +65,13 @@ def Shuffle(stage):
             swap(stage, i1, y)
             swap(stage, i2, x)
 
+
 def swap(stage, i, j):
     block1 = stage[i]
     block2 = stage[j]
     stage[i] = block2
     stage[j] = block1
+
 
 def drawtitle(stage, func):
     pen = stage.pen
@@ -30,24 +79,22 @@ def drawtitle(stage, func):
     font = ("Century", 34, "normal")
     name = func.__name__
     stage.pen.write(name, move=False, align="center", font=font)
+    stage.screen.update()
+
 
 def timer(func):
     def wrapper(stage):
-        t,d = stage.screen.tracer(), stage.screen.delay()
         drawtitle(stage,Shuffle)
         Shuffle(stage)
-        if func.__name__ == "CycleSort":
-            stage.screen.tracer(3)
-            stage.screen.delay()
         drawtitle(stage, func)
         then = time()
         func(stage)
+        stage.screen.update()
         print(f"{func.__name__} Duration: {time() - then} seconds.")
-        stage.screen.tracer(t)
-        stage.screen.delay(d)
         sleep(.5)
         return stage
     return wrapper
+
 
 def get_screen():
     screen = Screen()
@@ -65,5 +112,6 @@ def get_screen():
     screen.increment = screen.blockheight = conf.BLOCK_HEIGHT
     screen.base = screen.height
     screen.start = -screen.width + screen.blockwidth
-    screen.blocks = int(((screen.width * 2) - ((screen.blockwidth + 2)*3))//(screen.blockwidth + 2))
+    screen.blocks = int(((screen.width * 2) - (screen.blockwidth*2))//(screen.blockwidth+1))
+    screen.gradient = gradient(conf.GRADIENT, screen.blocks)
     return screen
