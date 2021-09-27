@@ -18,7 +18,7 @@ DELAY = 0
 BLOCK_HEIGHT = 8
 # Horizantal distance of color block
 BLOCK_WIDTH = 16
-GRADIENT = ["#e6f060","#ff3311","#440177"]
+GRADIENT = ["#ffffff","#e6f060","#00ffff","#ff3311","#00ff00","#0000ff","#ffff00","#ff0000","#6666f6","#440177","#137c63"]
 
 if DEBUG:
     TRACER = 3

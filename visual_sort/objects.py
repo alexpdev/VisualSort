@@ -1,25 +1,5 @@
-import random as rand
 from turtle import RawTurtle
-from itertools import chain
 from visual_sort import utils
-
-def gen_color():
-    chars = "123456789ABCDEF"
-    return "#" + "".join([rand.choice(chars) for i in range(6)])
-
-class Position:
-    def __init__(self, index, start, stop, base):
-        self.index = self.num = index
-        self.start = start
-        self.stop = stop
-        self.base = base
-
-    def __str__(self):
-        return "{" + f"{self.num}: {self.start}, {self.stop}" + "}"
-
-    def __repr__(self):
-        return repr(str(self))
-
 
 class Block(RawTurtle):
 
@@ -55,23 +35,29 @@ class Block(RawTurtle):
         return repr(self.value)
 
     def __eq__(self, other):
+        self.screen.update()
         if isinstance(other, type(self)):
             return other.height == self.height
         return False
 
     def __gt__(self, other):
+        self.screen.update()
         return self.height > other.height
 
     def __ge__(self, other):
+        self.screen.update()
         return self.height >= other.height
 
     def __lt__(self, other):
+        self.screen.update()
         return self.height < other.height
 
     def __le__(self, other):
+        self.screen.update()
         return self.height <= other.height
 
     def __ne__(self, other):
+        self.screen.update()
         if isinstance(other, type(self)):
             return self.height != other.height
         return True
@@ -106,10 +92,6 @@ class Block(RawTurtle):
         self.end_fill()
         self.up()
 
-
-def EmptyBlock(Block):
-    def __init__(self,*args,**kwargs):
-        super(EmptyBlock,self).__init__(*args,**kwargs)
 
 class Stage:
 
@@ -184,7 +166,7 @@ class Stage:
         self.blocks[idx].setindex(idx)
         other.draw()
         # if self.operations % 100 == 0:
-        self.screen.update()
+        # self.screen.update()
 
     def __str__(self):
         return str([i.value for i in self.blocks])
