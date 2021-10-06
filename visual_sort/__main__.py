@@ -39,6 +39,7 @@ def run(stage):
     QuickSort(stage)
     MergeSort(stage)
     TimSort(stage)
+    stage.screen.update()
 
 
 def main(args=None):

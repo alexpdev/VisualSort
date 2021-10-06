@@ -1,5 +1,6 @@
 from visual_sort.utils import timer
 
+
 @timer
 def InsertionSort(stage):
     for idx in range(1,len(stage)):
@@ -234,6 +235,7 @@ def ShellSort(stage):
                 pos -= mid
             stage[pos] = block
         mid = mid // 2
+
 
 def _merge(stage, lo, mid, hi):
     vals, seq = [], []

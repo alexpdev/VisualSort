@@ -1,5 +1,5 @@
 from turtle import RawTurtle
-from visual_sort import utils
+
 
 class Block(RawTurtle):
 
@@ -25,6 +25,7 @@ class Block(RawTurtle):
         self.stage = parent
         self.speed(screen.speed)
         self.index = index
+        self.__tracer = self.screen.tracer()
         self.ht()
         self.up()
 
@@ -35,29 +36,35 @@ class Block(RawTurtle):
         return repr(self.value)
 
     def __eq__(self, other):
-        self.screen.update()
+        if not self.__tracer:
+            self.screen.update()
         if isinstance(other, type(self)):
             return other.height == self.height
         return False
 
     def __gt__(self, other):
-        self.screen.update()
+        if not self.__tracer:
+            self.screen.update()
         return self.height > other.height
 
     def __ge__(self, other):
-        self.screen.update()
+        if not self.__tracer:
+            self.screen.update()
         return self.height >= other.height
 
     def __lt__(self, other):
-        self.screen.update()
+        if not self.__tracer:
+            self.screen.update()
         return self.height < other.height
 
     def __le__(self, other):
-        self.screen.update()
+        if not self.__tracer:
+            self.screen.update()
         return self.height <= other.height
 
     def __ne__(self, other):
-        self.screen.update()
+        if not self.__tracer:
+            self.screen.update()
         if isinstance(other, type(self)):
             return self.height != other.height
         return True
@@ -91,6 +98,8 @@ class Block(RawTurtle):
             self.goto(*corner)
         self.end_fill()
         self.up()
+        if not self.__tracer:
+            self.screen.update
 
 
 class Stage:
@@ -151,11 +160,9 @@ class Stage:
         self.pen.down()
 
     def __getitem__(self, idx):
-        # self.operations += 1
         return self.blocks[idx]
 
     def __setitem__(self, idx, other):
-        # self.operations += 1
         if other.index not in [idx, None]:
             other.clear()
             self.blocks[other.index] = None
@@ -165,8 +172,6 @@ class Stage:
         self.blocks[idx] = other
         self.blocks[idx].setindex(idx)
         other.draw()
-        # if self.operations % 100 == 0:
-        # self.screen.update()
 
     def __str__(self):
         return str([i.value for i in self.blocks])

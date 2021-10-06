@@ -3,9 +3,6 @@ import string
 from turtle import Screen
 from time import time, sleep
 from visual_sort import conf
-import itertools as it
-import random
-import sys
 
 cdict = {}
 def colordict():
@@ -39,6 +36,7 @@ def interpolateColors(color1, color2, steps):
     color1, color2 = [list(i) for i in [color1, color2]]
     for i in range(steps):
         yield interpolateColor(color1, color2, stepFactor * i)
+
 
 def gradient(colors, blocks):
     step = gap = blocks // (len(colors) - 1)
@@ -91,7 +89,9 @@ def timer(func):
         func(stage)
         stage.screen.update()
         print(f"{func.__name__} Duration: {time() - then} seconds.")
+        stage.screen.update()
         sleep(.5)
+        stage.screen.update()
         return stage
     return wrapper
 
