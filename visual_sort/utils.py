@@ -2,7 +2,11 @@ import random
 import string
 from turtle import Screen
 from time import time, sleep
-from visual_sort import conf
+try:
+    from visual_sort import conf
+except:
+    import conf
+
 
 cdict = {}
 def colordict():
