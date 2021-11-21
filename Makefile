@@ -45,3 +45,5 @@ push: clean ## push commit to github
 
 run: ## run program
 	python start.py
+
+build: ## Create executable for windows

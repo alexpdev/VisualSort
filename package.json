@@ -1,5 +1,21 @@
 {
-  "name": "visual_sort",
+  "name": "visualsort",
   "version": "1.0.0",
-  "license": "GNU GPLv3"
+  "description": "Visual Demonstrations of Sorting Algorithms.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexpdev/VisualSort.git"
+  },
+  "keywords": [],
+  "author": "alexpdev",
+  "email": "alexpdev@github.com",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/alexpdev/VisualSort/issues"
+  },
+  "url": "https://github.com/alexpdev/VisualSort",
+  "homepage": "https://github.com/alexpdev/VisualSort#readme"
 }

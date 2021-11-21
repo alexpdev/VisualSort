@@ -1,7 +1,5 @@
-try:
-    from visual_sort.utils import timer
-except:
-    from utils import timer
+from visualsort.utils import timer
+
 
 
 @timer
@@ -329,23 +327,3 @@ def CombSort(stage):
             if stage[i] > stage[i + gap]:
                 stage[i], stage[i+gap] = stage[i+gap], stage[i]
                 swapped = True
-
-
-
-@timer
-def PidgeonHoleSort(stage):
-    mins = min(stage)
-    maxs = max(stage)
-    print(mins)
-    print(maxs)
-
-
-
-
-if __name__ == '__main__':
-    from utils import get_screen, timer
-    from objects import Stage
-    screen = get_screen()
-    stage = Stage.create(screen)
-    PidgeonHoleSort(stage)
-    stage.screen.mainloop()

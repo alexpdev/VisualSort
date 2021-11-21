@@ -2,10 +2,7 @@ import random
 import string
 from turtle import Screen
 from time import time, sleep
-try:
-    from visual_sort import conf
-except:
-    import conf
+from visualsort import conf
 
 
 cdict = {}

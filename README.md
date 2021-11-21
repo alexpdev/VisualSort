@@ -14,28 +14,10 @@ Author: alexpdev
 
 Python >= v3.0
 
-### Installing
-
-To install, follow these steps:
-
-Option 1:
-
-1. Ensure Git is installed and working
-2. Open terminal and run ...
-
-Option 2:
-
-1. unzip contents into it's own directory.
-2. ensure Python v3.* is installed and working
-3. enter the following in the terminal commandline
+### Usage
 
 ```Windows:
 git clone https://github.com/alexpdev/turtlesort.git blackJack
-```
-
-### Usage
-
-```Windows
 python path\to\project\main.py
 ```
 
@@ -53,3 +35,10 @@ GNU GPL v3
 | Merge Sort | Active |
 | Quick Sort | Active |
 | Cycle Sort | Active |
+| Time Sort | Active |
+| Odd Even Sort | Active |
+| Comb Sort | Active |
+| Gnome Sort | Active |
+| Cocktail Sort | Active |
+| Shell Sort | Active |
+| Gnome Sort | Active |
