@@ -1,30 +1,58 @@
-# Settings Configuration
-TITLE = "Graphical Sorting Demonstrations"
-VERSION = 0.3
-LICENSE = "GNU GPLv3"
-# Activate Debug Mode
-DEBUG = False
-# Size of window Generated on your screen
-SCREEN_SIZE =  (.993,.93,0,0)
-# Background Color for screen, defaults to black but can use (r,g,b) values
-BACKGROUND =  "black"
-# Number of animation to perform per screen update  Default = 1
-TRACER = 75
-# The speed of pen drawing the vector animation 0-10. Set to 0 for no animation.
-SPEED = 0
-# Delay for animation to complete.
-DELAY = 0
-# The Vertical Distance added to each progressive color block
-BLOCK_HEIGHT = 5
-# Horizantal distance of color block
-BLOCK_WIDTH = 10
+from copy import deepcopy
+import os
+import configparser
 
-GRADIENT = ["#ffffff", "#e6f060", "#00ffff", "#ff3311", "#00ff00",
-            "#0000ff", "#ffff00", "#ff0000", "#6666f6", "#440177", "#137c63"]
 
-if DEBUG:
-    TRACER = 3
-    DELAY = 0
-    SPEED = 0
-    BLOCK_HEIGHT = 13
-    BLOCK_WIDTH = 22
+
+def configuration():
+    parser = configparser.ConfigParser()
+    config = None
+    for filename in os.listdir(os.getcwd()):
+        if os.path.splitext(filename)[-1] == ".ini":
+            parser.read_file(open(filename), filename)
+            if "VisualSort" in parser:
+                config = parser["VisualSort"]
+                break
+    if not config:
+        config = CONFIG
+        return config
+    for k, v in config.items():
+        if k == "gradient":
+            value = v.split(",")
+        elif k == "screensize":
+            value = tuple([float(i.strip()) for i in v.split("\n") if i])
+        elif v.isdigit():
+            value = int(v)
+        else:
+            value = v
+        try:
+            CONFIG[k] = value
+        except KeyError:
+            pass
+    config = deepcopy(CONFIG)
+    return config
+
+
+# Default configuration values
+CONFIG = {
+    "screensize": (.993,.93,0,0),
+    "background": "black",
+    "tracer": 3,
+    "speed": 0,
+    "delay": 0,
+    "blockheight": 13,
+    "blockwidth": 22,
+    "gradient": [
+        "#ffffff",
+        "#e6f060",
+        "#00ffff",
+        "#ff3311",
+        "#00ff00",
+        "#0000ff",
+        "#ffff00",
+        "#ff0000",
+        "#6666f6",
+        "#440177",
+        "#137c63"
+    ]
+}

@@ -1,7 +1,5 @@
 from visualsort.utils import timer
 
-
-
 @timer
 def InsertionSort(stage):
     for idx in range(1,len(stage)):
@@ -290,7 +288,6 @@ def _sort(stage, start, end):
 @timer
 def TimSort(stage):
 
-
     size = len(stage)
     gap = size // 8
     for start in range(0, size, gap):
@@ -305,8 +302,6 @@ def TimSort(stage):
             if mid < hi:
                 _merge(stage, lo, mid, hi)
         run *= 2
-
-
 
 @timer
 def CombSort(stage):
@@ -327,3 +322,52 @@ def CombSort(stage):
             if stage[i] > stage[i + gap]:
                 stage[i], stage[i+gap] = stage[i+gap], stage[i]
                 swapped = True
+
+def heapify(arr, n, i):
+    largest = i
+    l = 2 * i + 1
+    r = 2 * i + 2
+    if l < n and arr[largest] < arr[l]:
+        largest = l
+    if r < n and arr[largest] < arr[r]:
+        largest = r
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]  # swap
+        heapify(arr, n, largest)
+
+@timer
+def HeapSort(arr):
+    n = len(arr)
+    for i in range(n//2 - 1, -1, -1):
+        heapify(arr, n, i)
+    for i in range(n-1, 0, -1):
+        arr[i], arr[0] = arr[0], arr[i]  # swap
+        heapify(arr, i, 0)
+
+
+@timer
+def UnusualSort(stage):
+    start = 0
+    mid = len(stage) // 2
+    end = len(stage)
+    for i in range(1, mid):
+        current = stage[i]
+        j = i - 1
+        if stage[j] > current:
+            while j >= 0 and stage[j] > current:
+                item = stage[j]
+                stage[j+1] = item
+                j -= 1
+            stage[j+1] = current
+    for i in range(mid+1,end):
+        current = stage[i]
+        j = i - 1
+        if stage[j] < current:
+            while j >= mid and stage[j] < current:
+                item = stage[j]
+                stage[j+1] = item
+                j -= 1
+            stage[j+1] = current
+    i = mid - 1
+    j = mid
+    place = end - 1
