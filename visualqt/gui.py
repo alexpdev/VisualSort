@@ -1,14 +1,18 @@
 import random
 import sys
 import time
-from visualqt.utils import gradgen
-from visualqt.algorithms import bubblesort
+try:
+    from visualqt.utils import GradientGen
+    from visualqt.algorithms import bubblesort
+except ImportError:
+    from utils import GradientGen
+    from algorithms import bubblesort
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 
-gradient1 = gradgen()
-gradient2 = gradgen("#000000")
+gradient1 = GradientGen()
+gradient2 = GradientGen()
 
 class Rect(QGraphicsRectItem):
 
@@ -109,12 +113,10 @@ class Signaler(QObject):
     def addItem(self):
         args = self.scene.args
         self.scene.additem(*args)
-        self.wait.emit(.1)
 
     def removeItem(self):
         args = self.scene.args
         self.scene.removeItem(*args)
-        self.scene.app.processEvents()
 
 class Scene(QGraphicsScene):
 
@@ -123,10 +125,18 @@ class Scene(QGraphicsScene):
         self.signaler = Signaler(self)
         self.width = 800
         self.height = 400
-        self.args = None
+        self._args = None
         self.widget = None
         self.app = None
         self.setSceneRect(0, 0, self.width, self.height)
+
+    @property
+    def args(self):
+        return self._args
+
+    @args.setter
+    def args(self, vals):
+        self._args = vals
 
     def additem(self, pos, item):
         x,y = pos
@@ -149,6 +159,7 @@ class View(QGraphicsView):
     Insert = Signal([int])
     Append = Signal()
     Swap = Signal([int, int])
+    timerStop = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -211,12 +222,6 @@ class View(QGraphicsView):
         self.rects.append(item)
         self.app.processEvents()
 
-    def startTimer(self):
-        self.timer = QTimer()
-        self.timer.setInterval(80)
-        self.timer.timeout.connect(self.populator)
-        self.timer.start()
-
     def setScene(self, scene):
         super().setScene(scene)
         self.scene_ = scene
@@ -229,13 +234,13 @@ class View(QGraphicsView):
         self.height += ytotal
         self.extendy += self.height
 
-    def populator(self):
+    def fill(self):
         if self.popfunc is None:
             self.popfunc = self.populate()
         try:
             next(self.popfunc)
         except StopIteration:
-            self.timer.stop()
+            self.timerStop.emit()
 
     def populate(self):
         while self.originx < self.scene_.width - self.padding:
@@ -274,8 +279,6 @@ class View(QGraphicsView):
         self.app.processEvents()
 
 
-
-
 class Window(QMainWindow):
 
     def __init__(self, app) -> None:
@@ -312,31 +315,17 @@ class Window(QMainWindow):
         self.central = QWidget()
         self.central.setLayout(self.layout)
         self.setCentralWidget(self.central)
-        self.button1.clicked.connect(self.plusx)
-        self.button2.clicked.connect(self.minusx)
+        self.button1.clicked.connect(self.shuffle)
+        self.button2.clicked.connect(self.bubblesort)
         self.button3.clicked.connect(self.plusy)
-        self.button4.clicked.connect(self.minusy)
+        self.button4.clicked.connect(self.populate)
+        self.graphics.timerStop.connect(self.stopTimer)
         self.px, self.py, self.w, self.h = 10, 300-10, 8, 10
 
-    def iteminfofunc(self):
-        for item in self.scene.items():
-            info = {
-                "pos": item.pos(),
-                "rect": item.rect(),
-                "x": item.x(),
-                "y": item.y(),
-            }
-            print(info)
-        info = {
-            "focusItem": self.scene.focusItem(),
-            "height": self.scene.height(),
-            "width": self.scene.width(),
-            "selectedItems": self.scene.selectedItems(),
-            "sceneRect": self.scene.sceneRect()
-        }
-        print(info)
+    def stopTimer(self):
+        self.timer.stop()
 
-    def plusx(self):
+    def shuffle(self):
         self.graphics.shuffle()
 
     def plusy(self):
@@ -344,13 +333,13 @@ class Window(QMainWindow):
         rect = Rect()
         self.graphics.addItem(rect)
 
-    def minusx(self):
+    def bubblesort(self):
         view = self.graphics
         rects = self.graphics.rects
         bubblesort(view, rects)
-        # thread = threading.Thread(group=None, target=bubblesort, args=(view,rects))
-        # thread.start()
-        # thread.join()
 
-    def minusy(self):
-        self.graphics.startTimer()
+    def populate(self):
+        self.timer = QTimer()
+        self.timer.setInterval(70)
+        self.timer.timeout.connect(self.graphics.fill)
+        self.timer.start()

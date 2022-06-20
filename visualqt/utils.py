@@ -1,51 +1,58 @@
 import random
 
-combos = {
-    0: [0], 1: [1], 2: [2], 3: [0,1], 4: [0,2], 5: [1,2]
-}
+class GradientGen:
 
-START = "#4F7FA4"
+    def __init__(self, start=None, count=5):
+        self.start = start if start else self.geninit()
+        self.count = count
+        self.combinations = {0:[0], 1:[1], 2:[2], 3:[1,0], 4:[0,2], 5:[2,1]}
+        self.channels = []
+        self.combo = self.getcomb()
 
-def plus(start, index):
-    if int(start[index], 16) != 255:
-        start[index] = hex(int(start[index], 16) + 1)[2:].upper().rjust(2,"0")
-    else:
-        raise Exception
+    def geninit(self):
+        return [random.randint(20,254) for i in range(3)]
 
-def minus(start, index):
-    if int(start[index], 16) != 0:
-        start[index] = hex(int(start[index], 16) - 1)[2:].upper().rjust(2,"0")
-    else:
-        raise Exception
+    def getcomb(self):
 
-def getfigs(start):
-    choices = combos[random.randint(0,5)]
-    directions = []
-    for i in choices:
-        if start[i] == "FF":
-            directions.append(0)
-        elif start[i] == "00":
-            directions.append(1)
-        else:
-            directions.append(random.randint(0,1))
-    return directions, choices
+        comb = self.combinations[random.randint(0,5)]
+        return {i:random.randint(0,1) for i in comb}
 
-def gradgen(start=START, count=5):
-    start = [start[1:3], start[3:5], start[5:]]
-    choices, direction = getfigs(start)
-    while True:
-        for i,x in enumerate(choices):
-            for _ in range(count):
-                if direction[i]:
-                    try:
-                        plus(start, x)
-                    except Exception:
-                        choices, direction = getfigs(start)
-                        break
+    def hexlify(self):
+        out = "#"
+        for val in self.start:
+            out += hex(val).upper()[2:].rjust(2,"0")
+        return out
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.increment()
+        return self.hexlify()
+
+    def decrease(self, index, count):
+        if self.start[index] - count >= 0:
+            self.start[index] -= count
+            return True
+        self.start[index] = 0
+        return False
+
+    def increase(self, index, count):
+        if self.start[index] + count <= 255:
+            self.start[index] += count
+            return True
+        self.start[index] = 255
+        return False
+
+    def increment(self):
+        complete = False
+        while not complete:
+            for key, value in self.combo.items():
+                if value and self.increase(key, self.count):
+                    complete = True
+                elif not value and self.decrease(key, self.count):
+                    complete = True
                 else:
-                    try:
-                        minus(start, x)
-                    except Exception:
-                        choices, direction = getfigs(start)
-                        break
-            yield "".join(["#", *start])
+                    complete = False
+                    self.combo = self.getcomb()
+                    break
