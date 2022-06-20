@@ -13,7 +13,6 @@ class GradientGen:
         return [random.randint(20,254) for i in range(3)]
 
     def getcomb(self):
-
         comb = self.combinations[random.randint(0,5)]
         return {i:random.randint(0,1) for i in comb}
 

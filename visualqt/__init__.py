@@ -2,9 +2,9 @@ import sys
 from PySide6.QtWidgets import QApplication
 
 try:
-    from visualqt.gui import Rect, View, Window, Scene
+    from visualqt.window import Window
 except ImportError:
-    from gui import Rect, View, Window, Scene
+    from window import Window
 
 
 def execute():
