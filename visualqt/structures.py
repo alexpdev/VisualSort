@@ -108,7 +108,7 @@ class ListMixin:
 
     def append(self, item):
         size = len(self.seq)
-        self.scene.signaler.add.emit(size, item)
+        self.deque.append((self.sched.addItem,(size,item)))
         self.seq.append(item)
         self.app.processEvents()
 
@@ -121,13 +121,17 @@ class ListMixin:
     def swap(self, idx1, idx2):
         item1 = self.seq[idx1]
         item2 = self.seq[idx2]
-        self.scene.removeItem(item1)
+        # self.scene.removeItem(item1)
+        self.deque.append((self.sched.removeItem,(item1,)))
         self.app.processEvents()
-        self.scene.removeItem(item2)
+        # self.scene.removeItem(item2)
+        self.deque.append((self.sched.removeItem,(item2,)))
         self.app.processEvents()
-        self.scene.additem(idx2, item1)
+        # self.scene.additem(idx2, item1)
+        self.deque.append((self.sched.addItem,(idx2,item1)))
         self.app.processEvents()
-        self.scene.additem(idx1, item2)
+        # self.scene.additem(idx1, item2)
+        self.deque.append((self.sched.addItem,(idx1,item2)))
         self.app.processEvents()
         self.seq[idx1] = item2
         self.seq[idx2] = item1
@@ -137,10 +141,12 @@ class ListMixin:
         item2 = item
         while start < len(self.scene.pos) - 1:
             temp = self.seq[start]
-            self.scene.signaler.remove.emit(temp)
+            # self.scene.signaler.remove.emit(temp)
+            self.deque.append((self.sched.removeItem,(temp,)))
             self.app.processEvents()
             self.app.processEvents()
-            self.scene.signaler.add.emit(start, item2)
+            # self.scene.signaler.add.emit(start, item2)
+            self.deque.append((self.sched.addItem,(start,item2)))
             self.app.processEvents()
             item2 = temp
             start += 1
@@ -149,12 +155,15 @@ class ListMixin:
 
     def pop(self, index):
         item = self.seq[index]
-        self.scene.removeItem(item)
+        # self.scene.removeItem(item)
+        self.deque.append((self.sched.removeItem,(item,)))
         start = index
         while start < len(self.seq) - 1:
             item2 = self.seq[start+1]
-            self.scene.signaler.remove.emit(item2)
-            self.scene.signaler.add.emit(start, item2)
+            self.deque.append((self.sched.removeItem, (item2, )))
+            # self.scene.signaler.remove.emit(item2)
+            # self.scene.signaler.add.emit(start, item2)
+            self.deque.append((self.sched.addItem,(start,item2)))
             start += 1
             self.app.processEvents()
         item = self.seq.pop(index)

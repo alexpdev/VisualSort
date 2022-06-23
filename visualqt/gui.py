@@ -1,5 +1,6 @@
 import random
 import time
+from collections import deque
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -25,6 +26,21 @@ class Signaler(QObject):
         self.wait.connect(self.sleep)
         self.add.connect(self.addItem)
         self.remove.connect(self.removeItem)
+        self.deque = deque()
+        self.active = False
+        self.timer = QTimer()
+        self.timer.setInterval(50)
+        self.timer.timeout.connect(self.execute)
+        self.timer.start()
+
+    def execute(self):
+        if self.active:
+            return
+        self.active = True
+        while len(self.deque) > 0:
+            func, args = self.deque.popleft()
+            func(*args)
+        self.active = False
 
     def sleep(self, num=0):
         then = time.time()
@@ -33,9 +49,11 @@ class Signaler(QObject):
         return
 
     def addItem(self, index, rect):
+        self.sleep(.00000001)
         self.scene.additem(index, rect)
 
     def removeItem(self, item):
+        self.sleep(.00000001)
         # args = self.scene.args
         self.scene.removeItem(item)
 
@@ -44,6 +62,8 @@ class Scene(QGraphicsScene):
     def __init__(self, view=None):
         super().__init__()
         self.signaler = Signaler(self)
+        self.sched = self.signaler
+        self.deque = self.signaler.deque
         self.view = view
         self.app = self.view.app
         self.width = WIDTH
@@ -92,12 +112,15 @@ class View(QGraphicsView, ListMixin):
         self.fillfunc = None
         self.seq = []
         self.scene = Scene(view=self)
+        self.sched = self.scene.sched
+        self.deque = self.scene.deque
         self.setScene(self.scene)
 
     def clear(self):
         while (i := len(self.seq) - 1) >= 0:
             item = self.seq[i]
-            self.scene.removeItem(item)
+            # self.scene.removeItem(item)
+            self.deque.append((self.sched.removeItem, (item,)))
             del self.scene.pos[i]
             del self.seq[i]
             i -= 1
@@ -117,6 +140,8 @@ class View(QGraphicsView, ListMixin):
             item = Rect(self.originy)
             item.setRect(0, 0, RWIDTH, self.originy)
             self.scene.addItem(item)
+            # self.deque.append((self.
+            # sched.addItem,(item,)))
             self.scene.pos.append((self.originx, self.basey))
             item.setPos(self.originx, self.basey - self.originy)
             self.seq.append(item)
@@ -137,3 +162,9 @@ class View(QGraphicsView, ListMixin):
             self.app.processEvents()
             self.append(item)
             self.app.processEvents()
+        choices = list(range(len(self.seq)))
+        for i in range(len(self.seq)):
+            item = self.pop(i)
+            choice = random.choice(choices)
+            self.insert(choice, item)
+            choices.remove(choice)

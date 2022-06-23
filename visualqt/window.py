@@ -65,7 +65,7 @@ class Window(QMainWindow):
     def populate(self):
         if self.view.fillfunc is None:
             self.timer = QTimer()
-            self.timer.setInterval(70)
+            self.timer.setInterval(30)
             self.timer.timeout.connect(self.view.fill)
             self.timer.start()
         else:
