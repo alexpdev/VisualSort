@@ -20,6 +20,7 @@ from visualsort.algorithms import (
     CombSort,
     HeapSort,
     UnusualSort,
+    reverse
     )
 
 """Visual Sorting Implementations."""
@@ -48,6 +49,7 @@ class Runner:
         TimSort(self.stage)
         HeapSort(self.stage)
         UnusualSort(self.stage)
+        reverse(self.stage)
         self.stage.screen.update()
 
 

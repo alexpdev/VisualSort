@@ -25,7 +25,6 @@ class Block(RawTurtle):
         self.stage = parent
         self.speed(screen.speed)
         self.index = index
-        self.__tracer = self.screen.tracer()
         self.ht()
         self.up()
 
@@ -36,35 +35,23 @@ class Block(RawTurtle):
         return repr(self.value)
 
     def __eq__(self, other):
-        if not self.__tracer:
-            self.screen.update()
         if isinstance(other, type(self)):
             return other.height == self.height
         return False
 
     def __gt__(self, other):
-        if not self.__tracer:
-            self.screen.update()
         return self.height > other.height
 
     def __ge__(self, other):
-        if not self.__tracer:
-            self.screen.update()
         return self.height >= other.height
 
     def __lt__(self, other):
-        if not self.__tracer:
-            self.screen.update()
         return self.height < other.height
 
     def __le__(self, other):
-        if not self.__tracer:
-            self.screen.update()
         return self.height <= other.height
 
     def __ne__(self, other):
-        if not self.__tracer:
-            self.screen.update()
         if isinstance(other, type(self)):
             return self.height != other.height
         return True
@@ -87,6 +74,9 @@ class Block(RawTurtle):
         top, bottom = self.yends()
         return [(left,bottom),(right,bottom),(right,top),(left,top)]
 
+    def update(self):
+        self.screen.update()
+
     def draw(self):
         self.up()
         corners = self.corners()
@@ -98,8 +88,6 @@ class Block(RawTurtle):
             self.goto(*corner)
         self.end_fill()
         self.up()
-        if not self.__tracer:
-            self.screen.update
 
 
 class Stage:
@@ -172,6 +160,9 @@ class Stage:
         self.blocks[idx] = other
         self.blocks[idx].setindex(idx)
         other.draw()
+
+    def update(self):
+        self.screen.update()
 
     def __str__(self):
         return str([i.value for i in self.blocks])

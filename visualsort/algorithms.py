@@ -370,4 +370,8 @@ def UnusualSort(stage):
             stage[j+1] = current
     i = mid - 1
     j = mid
-    place = end - 1
+
+
+@timer
+def reverse(stage):
+    stage = stage[::-1]

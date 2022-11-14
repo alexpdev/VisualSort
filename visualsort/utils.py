@@ -69,7 +69,9 @@ def swap(stage, i, j):
     block1 = stage[i]
     block2 = stage[j]
     stage[i] = block2
+    stage.update()
     stage[j] = block1
+    stage.update()
 
 
 def drawtitle(stage, func):
